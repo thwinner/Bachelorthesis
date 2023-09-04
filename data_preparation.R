@@ -126,18 +126,23 @@ data <- data %>%
   mutate(gender_grouped = case_when(gender %in% c(1) ~ "1", gender %in% c(2) ~ "2", gender %in% c(3) ~ NA_character_, gender %in% c(4) ~ NA_character_)) %>%
   mutate(area_grouped = case_when(area %in% c(1, 2) ~ "0", area %in% c(3) ~ "1")) %>%
   mutate(depression_group = case_when(depressed %in% c(1, 2) ~ "1", depressed %in% c(3, 4) ~ "2", depressed %in% c(5) ~ "3")) %>%
-  mutate(anxious_group = case_when(anxious %in% c(1, 2) ~ "1", anxious %in% c(3, 4) ~ "2", anxious %in% c(5) ~ "3"))
+  mutate(anxious_group = case_when(anxious %in% c(1, 2) ~ "1", anxious %in% c(3, 4) ~ "2", anxious %in% c(5) ~ "3")) %>%
+  mutate(anxious_flip = case_when(anxious == 1 ~ 5, anxious == 2 ~ 4, anxious == 4 ~ 2, anxious == 5 ~ 1, anxious == 3 ~ 3)) %>%
+  mutate(depression_flip = case_when(depressed == 1 ~ 5, depressed == 2 ~ 4, depressed == 3 ~ 3, depressed == 4 ~ 2, depressed == 5 ~ 1))
 
 data[, c("anxious", "depressed", "gender", "age", "area")] <- lapply(data[, c("anxious", "depressed", "gender", "age", "area")] , factor)
+
+
 
 ########################################## AGGREGATE DATA BY WEEK & MONTH ##########################################
 
 # Remove last month from data
+data$date <- as.Date(ymd_hms(data$RecordedDate))
 data <- data %>%
   filter(date < "2022-06-01")
 
 # Add week, month and year as columns
-data$date <- as.Date(ymd_hms(data$RecordedDate))
+data$day <- floor_date(data$date, "day")
 data$week <- floor_date(data$date, "week")
 data$month <- floor_date(data$date, "month")
 data$year <- floor_date(data$date, "year")
@@ -150,15 +155,35 @@ data_monthly <- data %>%
   drop_na(month, continent) %>%
   group_by(month, continent) %>%
   dplyr::summarize(depressed_monthly = mean(depressed, na.rm = TRUE),
-                   anxious_monthly = mean(anxious, na.rm = TRUE)) %>%
+                   anxious_monthly = mean(anxious, na.rm = TRUE),
+                   depressed_monthly_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_monthly_flip = mean(anxious_flip, na.rm = TRUE)) %>%
   as.data.frame()
 
 data_weekly <- data %>%
   drop_na(month, continent) %>%
   group_by(week, continent) %>%
   dplyr::summarize(depressed_weekly = mean(depressed, na.rm = TRUE),
-                   anxious_weekly = mean(anxious, na.rm = TRUE)) %>%
+                   anxious_weekly = mean(anxious, na.rm = TRUE),
+                   depressed_weekly_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_weekly_flip = mean(anxious_flip, na.rm = TRUE)) %>%
   as.data.frame()
+
+data_daily <- data %>%
+  drop_na(day, country_agg) %>%
+  group_by(day, country_agg) %>%
+  dplyr::summarize(depressed_daily = mean(depressed, na.rm = TRUE),
+                   anxious_daily = mean(anxious, na.rm = TRUE),
+                   depressed_daily_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_daily_flip = mean(anxious_flip, na.rm = TRUE),
+                   iso = first(ISO_3),
+                   continent = first(continent)) %>%
+  mutate(week = floor_date(day, "week"),
+         month = floor_date(day, "month"))
+
+
+
+
 
 #write.csv(data, "data_prepared.csv", quote = FALSE, row.names = FALSE)
 
