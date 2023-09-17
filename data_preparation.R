@@ -4,22 +4,12 @@ library(tidyverse)
 library(data.table)
 library(plyr)
 library(dplyr)
+library(lubridate)
 
 ########################################## READ DATA AND PREPARE DATAFRAME ##########################################
 ## Put single files into one big dataframe and select only variables of interest
-#files <- list.files(path = "data", recursive = TRUE, pattern = ".csv*", full.names = TRUE)
-
-# data <- rbind.fill(lapply(files, function(x) {
-#   fread(x, select = c("survey_region", "A2_2_1",  "A2_2_2", "B0", "B8a", "C14a", "D1", "D2", "D4", "D5", "V10_1",
-#                       "V10_2", "V10_3", "V10_4", "V10_5", "V10_6", "V10_7", "V10_8", "V10_9", "V10_10",
-#                       "E3", "E4", "E2", "E5", "country_region_numeric", "region_agg", "country_agg"),
-#         stringsAsFactors = TRUE, fill = TRUE, data.table = FALSE)}))
-# 
-# write.csv(data, "data.csv", quote = FALSE, row.names = FALSE)
-
-
-######### Read data
-
+# files <- list.files(path = "data", recursive = TRUE, pattern = ".csv*", full.names = TRUE)
+#
 # selected_cols <- c("survey_region", "A2_2_1",  "A2_2_2", "B0", "B8a", "C14a", "D1", "D2", "D4", "D5", "V10_1",
 #                    "V10_2", "V10_3", "V10_4", "V10_5", "V10_6", "V10_7", "V10_8", "V10_9", "V10_10",
 #                    "E3", "E4", "E2", "E5", "country_region_numeric", "region_agg", "country_agg", "ISO_3", 
@@ -44,7 +34,7 @@ data <- read_csv("data.csv") %>%
   mutate_all(na_if, -88) %>%
   mutate_all(na_if, -77)
 
-########################################## ASSIGN GEOSCHEME ##########################################
+########################################## ASSIGN GEOSCHEME ############################################################
 
 # Remove observations from country Antarctica
 data <- data[!data$country_agg == "Antarctica",]
@@ -109,7 +99,7 @@ data <- data %>%
 
 ########################################## PREPARE DATA ##########################################
 
-## Selected Variables and change groups of some factor variables (age, gender, area, had_covid) :
+## Select Variables and group some factor variables (age, gender, area, depression, anxiety) :
 ## - A2_2_1: What is the country or region where you are currently staying?
 ## - D1: During the past 7 days, how often did you feel so nervous that nothing could calm you down?
 ## - D2: During the past 7 days, how often did you feel so depressed that nothing could cheer you up?
@@ -134,14 +124,14 @@ data[, c("anxious", "depressed", "gender", "age", "area")] <- lapply(data[, c("a
 
 
 
-########################################## AGGREGATE DATA BY WEEK & MONTH ##########################################
+########################################## AGGREGATE DATA BY DAY, WEEK & MONTH ##########################################
 
-# Remove last month from data
+# Remove last month from data as there are only a few countries included
 data$date <- as.Date(ymd_hms(data$RecordedDate))
 data <- data %>%
   filter(date < "2022-06-01")
 
-# Add week, month and year as columns
+# Add day, week, month and year as columns
 data$day <- floor_date(data$date, "day")
 data$week <- floor_date(data$date, "week")
 data$month <- floor_date(data$date, "month")
@@ -150,8 +140,17 @@ data$year <- floor_date(data$date, "year")
 data$depressed <- as.numeric(data$depressed)
 data$anxious <- as.numeric(data$anxious)
 
-# Aggregate depressed and anxious by month and week
-data_monthly <- data %>%
+# Aggregate depressed and anxious by month and week for continents and countries
+data_monthly_country <- data %>%
+  drop_na(month, country_agg) %>%
+  group_by(month, country_agg) %>%
+  dplyr::summarize(depressed_monthly = mean(depressed, na.rm = TRUE),
+                   anxious_monthly = mean(anxious, na.rm = TRUE),
+                   depressed_monthly_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_monthly_flip = mean(anxious_flip, na.rm = TRUE)) %>%
+  as.data.frame()
+
+data_monthly_cont <- data %>%
   drop_na(month, continent) %>%
   group_by(month, continent) %>%
   dplyr::summarize(depressed_monthly = mean(depressed, na.rm = TRUE),
@@ -160,7 +159,15 @@ data_monthly <- data %>%
                    anxious_monthly_flip = mean(anxious_flip, na.rm = TRUE)) %>%
   as.data.frame()
 
-data_weekly <- data %>%
+data_weekly_country <- data %>%
+  drop_na(month, country_agg) %>%
+  group_by(week, country_agg) %>%
+  dplyr::summarize(depressed_weekly = mean(depressed, na.rm = TRUE),
+                   anxious_weekly = mean(anxious, na.rm = TRUE),
+                   depressed_weekly_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_weekly_flip = mean(anxious_flip, na.rm = TRUE))
+
+data_weekly_cont <- data %>%
   drop_na(month, continent) %>%
   group_by(week, continent) %>%
   dplyr::summarize(depressed_weekly = mean(depressed, na.rm = TRUE),
@@ -169,7 +176,7 @@ data_weekly <- data %>%
                    anxious_weekly_flip = mean(anxious_flip, na.rm = TRUE)) %>%
   as.data.frame()
 
-data_daily <- data %>%
+data_daily_country <- data %>%
   drop_na(day, country_agg) %>%
   group_by(day, country_agg) %>%
   dplyr::summarize(depressed_daily = mean(depressed, na.rm = TRUE),
@@ -181,11 +188,17 @@ data_daily <- data %>%
   mutate(week = floor_date(day, "week"),
          month = floor_date(day, "month"))
 
-
-
-
-
-#write.csv(data, "data_prepared.csv", quote = FALSE, row.names = FALSE)
+data_daily_cont <- data %>%
+  drop_na(day, continent) %>%
+  group_by(day, continent) %>%
+  dplyr::summarize(depressed_daily = mean(depressed, na.rm = TRUE),
+                   anxious_daily = mean(anxious, na.rm = TRUE),
+                   depressed_daily_flip = mean(depression_flip, na.rm = TRUE),
+                   anxious_daily_flip = mean(anxious_flip, na.rm = TRUE),
+                   iso = first(ISO_3),
+                   continent = first(continent)) %>%
+  mutate(week = floor_date(day, "week"),
+         month = floor_date(day, "month"))
 
 
 

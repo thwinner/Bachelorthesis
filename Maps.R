@@ -13,10 +13,10 @@ library(ggpattern)
 # Get coordinates from countries
 world <- map_data("world")
 
+# Merge "world"-data and CTIS-data
 data$depressed <- as.numeric(data$depressed)
 data$anxious <- as.numeric(data$anxious)
 
-# Merge "world"-data and CTIS-data
 data_shape <- data %>%
   select(country_region_numeric, country_agg, continent, continent_region, depression_flip, anxious_flip, A2_2_1, ISO_3) %>%
   group_by(ISO_3) %>%
@@ -33,7 +33,7 @@ map_data <- map_data[!map_data$region == "Antarctica",]
 ############################################# Maps ############################
 theme_set(theme_classic())
 
-# UN-Geoscheme
+## UN-Geoscheme
 ggplot(data = map_data) +
   geom_map(map = map_data, aes(long, lat, map_id = region, fill = continent),  
            colour = "black", size = 0.1) +
@@ -50,9 +50,9 @@ ggplot(data = map_data) +
         legend.direction = "horizontal",
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm"))+
   guides(fill = guide_legend(ncol = 6))
-ggsave("continent_geoscheme.png", width = 11, height = 6)
+# ggsave("continent_geoscheme.png", width = 11, height = 6)
 
-# Depression over continents
+## Depression over continents
 nrow(data %>% drop_na(continent, depressed))
 # -> 46573464
 
@@ -70,9 +70,9 @@ ggplot(data = map_data) +
         legend.direction = "horizontal",
         legend.key.width = unit(2.5, "cm"),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm"))
-ggsave("map_depression.png", width = 11, height = 6)
+# ggsave("map_depression.png", width = 11, height = 6)
 
-# Anxiety over continents
+## Anxiety over continents
 nrow(data %>% drop_na(continent, anxious))
 # -> 46461625
 
@@ -90,5 +90,5 @@ ggplot(data = map_data) +
         legend.direction = "horizontal",
         legend.key.width = unit(2.5, "cm"),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm"))
-ggsave("map_anxiety.png", width = 11, height = 6)
+# ggsave("map_anxiety.png", width = 11, height = 6)
 

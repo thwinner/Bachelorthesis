@@ -39,7 +39,7 @@ ggplot(subset(data, !is.na(age))) +
         axis.title.y = element_text(size = 14, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm"),
         plot.caption = element_text(size = 12))
-ggsave("age.png", width = 8, height = 7.5)
+# ggsave("age.png", width = 8, height = 7.5)
 
 
 ## Plot with age distribution conditioned on gender
@@ -63,7 +63,7 @@ ggplot(subset(data, !is.na(age) & !is.na(gender_grouped))) +
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm"),
         plot.caption = element_text(size = 12)) +
   scale_fill_manual("Gender", values = c("lightblue", "darkred", "darkgreen"), labels = c("Male", "Female", "Other"))
-ggsave("age_gendergrouped.png", width = 8, height = 7.5)
+# ggsave("age_gendergrouped.png", width = 8, height = 7.5)
 
 ## Plot with age distribution with age groups conditioned on gender 
 nrow(data %>% drop_na(age_grouped, gender_grouped))
@@ -86,7 +86,7 @@ ggplot(subset(data, !is.na(age_grouped) & !is.na(gender_grouped))) +
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_fill_manual("Gender", values = c("lightblue", "darkred", "darkgreen"), labels = c("Male", "Female", "Other")) +
   ylim(0, 0.3)
-ggsave("agegrouped_gendergrouped.png", width = 8, height = 7.5)
+# ggsave("agegrouped_gendergrouped.png", width = 8, height = 7.5)
 
 
 ###################################################### PLOTS FOR DEPRESSION #############################################
@@ -112,10 +112,9 @@ ggplot(subset(data, !is.na(depression_flip))) +
         axis.title.y = element_text(size = 20, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_y_continuous(limits = c(0, 0.6), labels = function(x) paste0(x*100, "%"))
-ggsave("bar_depressed.png", width = 8, height = 7.5)
+# ggsave("bar_depressed.png", width = 8, height = 7.5)
 
 ## Plot with grouped depression conditioned on gender
-
 nrow(data %>% drop_na(depressed, gender_grouped))
 # -> 43194702
 
@@ -143,35 +142,7 @@ ggplot(df_gender_dep) +
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_fill_manual("Gender", values = c("lightblue", "darkred", "darkgreen"), labels = c("Male", "Female", "Other")) +
   scale_y_continuous(limits = c(0, 0.7), labels = function(x) paste0(x*100, "%"))
-ggsave("depressed_gendergrouped.png", width = 8, height = 7.5)
-
-
-# Plot with depression conditioned on age groups -- MUSS NOCH GEMACHT WERDEN
-nrow(data %>% drop_na(depressed, age_grouped))
-# -> 43894177
-
-data %>%
-  drop_na(depressed, age_grouped) %>%
-  dplyr::count(depressed, age_grouped) %>%
-  group_by(age_grouped) %>%
-  mutate(freq = n / sum(n)) %>%
-ggplot() +
-  geom_bar(aes(x = depressed, fill = age_grouped, y = freq), position = position_dodge(), stat = "identity") +
-  scale_y_continuous(labels = label_comma()) +
-  scale_x_discrete(breaks = c("1", "2", "3", "4", "5"),
-                   labels = c("All the time", "Most of the time", "Some of the time", "A little of the time", "None of the time"),
-                   guide = guide_axis(angle = 40)) + 
-  labs(x = "Feeling of being depressed", y = "Relative frequency", caption = paste("n: ", 43894177)) +
-  theme(axis.text = element_text(size = 12),
-        axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14),
-        legend.position = "top",
-        legend.text = element_text(size = 10)) +
-  scale_fill_manual("Age", 
-                    values = c("darkblue", "cornflowerblue", "deepskyblue"), 
-                    labels = c("18-34", "35-64", expression("">=65))) +
-  scale_y_continuous(limits = c(0, 0.8), labels = function(x) paste0(x*100, "%"))
-ggsave("depressed_agegrouped.png", width = 8, height = 7.5)
+# ggsave("depressed_gendergrouped.png", width = 8, height = 7.5)
 
 
 ## Plot with depression groups conditioned on age groups
@@ -206,7 +177,7 @@ ggplot(df_age_dep) +
                     values = c("darkblue", "cornflowerblue", "deepskyblue"), 
                     labels = c("18-34", "35-64", expression("">=65))) +
   scale_y_continuous(limits = c(0, 0.8), labels = function(x) paste0(x*100, "%"))
-ggsave("depressedgrouped_agegrouped.png", width = 8, height = 7.5)
+# ggsave("depressedgrouped_agegrouped.png", width = 8, height = 7.5)
 
 
 ## Plot with depression groups conditioned on continents
@@ -239,9 +210,11 @@ ggplot(df_continent_dep) +
                    limits = c("3", "2", "1")) +
   scale_y_continuous(limits = c(0, 0.8), labels = function(x) paste0(x*100, "%")) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE))
-ggsave("depressedgroup_continent.png", width = 10, height = 9)
+# ggsave("depressedgroup_continent.png", width = 10, height = 9)
 
 ############################################ PLOTS FOR ANXIETY ######################################################
+
+## Tables for anxiety
 tab_anxiety <- table(data$anxious)
 tab_per_anxiety <- table(subset(data, !is.na(anxious))$anxious)/length(subset(data, !is.na(anxious))$anxious)
 xtable(tab_per_anxiety, digits = 2)
@@ -261,7 +234,7 @@ ggplot(subset(data, !is.na(anxious_flip))) +
         axis.title.y = element_text(size = 20, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_y_continuous(limits = c(0, 0.6), labels = function(x) paste0(x*100, "%"))
-ggsave("bar_anxious.png", width = 8, height = 7.5)
+# ggsave("bar_anxious.png", width = 8, height = 7.5)
 
 ## Plot with anxiety conditioned on gender groups
 
@@ -293,19 +266,19 @@ ggplot(df_gender_anx) +
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_fill_manual("Gender", values = c("lightblue", "darkred", "darkgreen"), labels = c("Male", "Female", "Other")) +
   scale_y_continuous(limits = c(0, 0.7), labels = function(x) paste0(x*100, "%"))
-ggsave("anxious_gendergrouped.png", width = 8, height = 7.5)
+# ggsave("anxious_gendergrouped.png", width = 8, height = 7.5)
 
 
 ## Plot with anxiety groups conditioned on age groups
+nrow(data %>% drop_na(anxious_group, age_grouped))
+# -> 43786804
+
 df_age <- data %>%
   drop_na(anxious_group, age_grouped) %>%
   group_by(age_grouped) %>%
   dplyr::summarise(n_anx = count(anxious_group),
                    n = n()) %>%
   mutate(freq = n_anx$freq / n)
-
-nrow(data %>% drop_na(anxious_group, age_grouped))
-# -> 43786804
 
 ggplot(df_age) +
     geom_bar(aes(x = as.factor(n_anx$x), fill = age_grouped, y = freq), position = "dodge", stat = "identity") +
@@ -326,19 +299,19 @@ ggplot(df_age) +
     scale_fill_manual("Age", values = c("darkblue", "cornflowerblue", "deepskyblue"), 
                       labels = c("18-34", "35-64", expression("">=65))) +
     scale_y_continuous(limits = c(0, 0.8), labels = function(x) paste0(x*100, "%"))
-ggsave("anxious_agegrouped.png", width = 8, height = 7.5)
+# ggsave("anxious_agegrouped.png", width = 8, height = 7.5)
 
 
 ## Plot with anxiety groups conditioned on continents
+nrow(data %>% drop_na(anxious_group, continent))
+# -> 46461625
+
 df_continent <- data %>%
   drop_na(anxious_group, continent) %>%
   group_by(continent) %>%
   dplyr::summarise(n_anx = count(anxious_group),
                    n = n()) %>%
   mutate(freq = n_anx$freq / n)
-
-nrow(data %>% drop_na(anxious_group, continent))
-# -> 46461625
 
 ggplot(df_continent) +
   geom_bar(aes(x = as.factor(n_anx$x), fill = continent, y = freq), position = "dodge", stat = "identity") +
@@ -358,13 +331,15 @@ ggplot(df_continent) +
                    limits = c("3", "2", "1")) + 
   scale_y_continuous(limits = c(0, 0.8), labels = function(x) paste0(x*100, "%")) +
   guides(fill = guide_legend(nrow = 2, byrow = TRUE))
-ggsave("anxious_continent.png", width = 10, height = 9)
+# ggsave("anxious_continent.png", width = 10, height = 9)
 
 ###################################################### PLOTS FOR CONTINENTS #############################################
+
+## Tables for continents
 tab_per_cont <- table(subset(data, !is.na(continent))$continent)/length(subset(data, !is.na(continent))$continent)
 xtable(tab_per_cont, digits = 2)
 
-# Plot with continent distribution
+## Plot with continent distribution
 nrow(data %>% drop_na(continent))
 # -> 67571490
 
@@ -378,9 +353,12 @@ ggplot(subset(data, !is.na(continent))) +
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   scale_fill_manual("Continent", values = c("#FFCC00", "darkmagenta", "#009933", "#FF9933", "#CC6666")) +
   scale_y_continuous(limits = c(0, 0.4), labels = function(x) paste0(x*100, "%"))
-ggsave("continents.png", width = 8, height = 7.5)
+# ggsave("continents.png", width = 8, height = 7.5)
 
 ###################################################### COUNTRIES #############################################
+nrow(data %>% drop_na(anxious_group, depression_group, country_agg, continent))
+# -> 46356898
+
 df_country <- data %>%
   drop_na(anxious_group, country_agg, depression_group) %>%
   group_by(ISO_3, country_agg) %>%
@@ -392,9 +370,7 @@ df_country <- data %>%
   mutate(freq_anx = anx$freq / n,
          freq_dep = dep$freq / n)
 
-nrow(data %>% drop_na(anxious_group, depression_group, country_agg, continent))
-# ->
-
+theme_set(theme_classic())
 ggplot(df_country, aes(x = freq_anx, y = freq_dep)) +
   geom_text(aes(label = ISO_3, color = continent), size = 4) +
   geom_abline(intercept = 0, slope = 1) +
@@ -404,31 +380,16 @@ ggplot(df_country, aes(x = freq_anx, y = freq_dep)) +
   annotate("text", x = mean(df_country$freq_anx) + 0.004, y = 0.28, label = "mean anxiety", angle = 90, size = 5, color = "darkgrey") +
   geom_hline(yintercept = mean(df_country$freq_dep), colour = "darkgrey", linetype = "dashed") +
   annotate("text", y = mean(df_country$freq_dep) - 0.006, x = 0.29, label = "mean depression", angle = 0, size = 5, color = "darkgrey") +
-  scale_colour_manual("Continent", values = c("#FFCC00", "darkmagenta", "#009933", "#FF9933", "#CC6666"))
+  scale_colour_manual("Continent", values = c("#FFCC00", "darkmagenta", "#009933", "#FF9933", "#CC6666")) +
   theme(legend.position = "none",
         axis.text = element_text(size = 14.5),
         axis.title.x = element_text(size = 16, face = "bold", margin = margin(t = 15, r = 0, b = 0, l = 0)),
         axis.title.y = element_text(size = 16, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   labs(x = "Relative frequency of anxiety", y = "Relative frequency of depression")
-ggsave("scatter_country.png", width = 12, height = 8)
-
-
-
-
+# ggsave("scatter_country.png", width = 12, height = 8)
 
 ###################################################### CORRELATION #############################################
 cor(data$anxious, data$depressed, use = "pairwise.complete.obs")
 # -> 0.6672727
-
-
-
-
-
-
-
-
-
-
-
 
