@@ -60,7 +60,7 @@ ggplot(data = map_data) +
   geom_map(map = map_data, aes(long, lat, map_id = region, fill = mean_region_depressed),  
            colour = "black", size = 0.1) +
   labs(x = "Longitude", y = "Latitude", fill = "Depression") +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), na.value = "gray86") +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), na.value = "gray86") +
   theme(axis.text = element_text(size = 14.5),
         axis.title.x = element_text(size = 16, face = "bold", margin = margin(t = 15, r = 0, b = 0, l = 0)),
         axis.title.y = element_text(size = 16, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),
@@ -80,7 +80,7 @@ ggplot(data = map_data) +
   geom_map(map = map_data, aes(long, lat, map_id = region, fill = mean_region_anxious),  
            colour = "black", size = 0.1) +
   labs(x = "Longitude", y = "Latitude", fill = "Anxiety") +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), na.value = "gray86") +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), na.value = "gray86") +
   theme(axis.text = element_text(size = 14.5),
         axis.title.x = element_text(size = 16, face = "bold", margin = margin(t = 15, r = 0, b = 0, l = 0)),
         axis.title.y = element_text(size = 16, face = "bold", margin = margin(t = 0, r = 25, b = 0, l = 0)),

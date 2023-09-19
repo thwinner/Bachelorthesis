@@ -309,7 +309,7 @@ nrow(data %>% drop_na(month, continent, depressed))
 
 ggplot(data_monthly_cont, aes(x = month, y = continent)) +
   geom_tile(aes(fill = depressed_monthly_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -331,7 +331,7 @@ nrow(data %>% drop_na(month, continent, anxious))
 
 ggplot(data_monthly_cont, aes(x = month, y = continent)) +
   geom_tile(aes(fill = anxious_monthly_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -345,15 +345,15 @@ ggplot(data_monthly_cont, aes(x = month, y = continent)) +
         legend.key.width = unit(2, "cm"),
         plot.margin = margin(0.8, 0.8, 0.8, 0.8, "cm")) +
   labs(x = "Month", y = "Continent")
-# ggsave("heatmap_continents_month_anx.png", width = 11, height = 6)
+ggsave("heatmap_continents_month_anx.png", width = 11, height = 6)
 
-## Heatmap for continent and depression; weekly aggregated
+# ## Heatmap for continent and depression; weekly aggregated
 nrow(data %>% drop_na(week, depressed, continent))
 # -> 46573464
 
 ggplot(data_weekly_cont, aes(x = week, y = continent)) +
   geom_tile(aes(fill = depressed_weekly_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -375,7 +375,7 @@ nrow(data %>% drop_na(week, anxious, continent))
 
 ggplot(data_weekly_cont, aes(x = week, y = continent)) +
   geom_tile(aes(fill = anxious_weekly_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 2.5), labels = c(1, 1.5, 2, 2.5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -410,7 +410,7 @@ nrow(data %>% drop_na(country_agg, week, continent, depressed) %>% filter(contin
 
 ggplot(data_week_africa, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = depressed_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -432,7 +432,7 @@ nrow(data %>% drop_na(country_agg, month, continent, anxious) %>% filter(contine
 
 ggplot(data_week_africa, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = anxious_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -465,7 +465,7 @@ nrow(data %>% filter(continent == "America") %>% drop_na(country_agg, month, con
 
 ggplot(data_week_america, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = depressed_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -487,7 +487,7 @@ nrow(data %>% drop_na(country_agg, month, continent, anxious) %>% filter(contine
 
 ggplot(data_week_america, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = anxious_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -520,7 +520,7 @@ nrow(data %>% filter(continent == "Europe") %>% drop_na(country_agg, week, conti
 
 ggplot(data_week_europe, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = depressed_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -542,7 +542,7 @@ nrow(data %>% filter(continent == "Europe") %>% drop_na(country_agg, week, conti
 
 ggplot(data_week_europe, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = anxious_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0))  +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -574,7 +574,7 @@ nrow(data %>% drop_na(country_agg, month, continent, depressed) %>% filter(conti
 
 ggplot(data_week_oceania, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = depressed_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -596,7 +596,7 @@ nrow(data %>% drop_na(country_agg, month, continent, anxious) %>% filter(contine
 
 ggplot(data_week_oceania, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = anxious_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
@@ -628,7 +628,7 @@ nrow(data %>% drop_na(country_agg, week, continent, depressed) %>% filter(contin
 
 ggplot(data_week_asia, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = depressed_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Depression", barwidth = 15)) +
@@ -650,7 +650,7 @@ nrow(data %>% drop_na(country_agg, week, continent, anxious) %>% filter(continen
 
 ggplot(data_week_asia, aes(x = week, y = country_agg)) +
   geom_tile(aes(fill = anxious_week_flip), color = "white", lwd = 0.4, linetype = 1) +
-  scale_fill_gradientn(colors = c("blue", "white", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
+  scale_fill_gradientn(colors = c("blue", "lightyellow", "red"), limits = c(1, 5), labels = c(1, 2, 3, 4, 5)) +
   scale_x_date(date_breaks = "2 months", date_labels = "%m-%y", limits = as.Date(c("2020-04-01" ,"2022-06-01")), expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0))  +
   guides(fill = guide_colourbar(title = "Anxiety", barwidth = 15)) +
